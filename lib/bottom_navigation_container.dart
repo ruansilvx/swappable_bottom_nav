@@ -18,26 +18,26 @@ class BottomNavigationContainer extends StatelessWidget {
         onTap: (index) {
           statefulNavigationShell.goBranch(index);
         },
-        items: const [
+        items: [
           BottomNavigationBarItem(
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.blue.shade400,
             label: 'tab1',
-            icon: Icon(Icons.home),
+            icon: const Icon(Icons.home),
           ),
           BottomNavigationBarItem(
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.lightGreen.shade400,
             label: 'tab2',
-            icon: Icon(Icons.book),
+            icon: const Icon(Icons.book),
           ),
           BottomNavigationBarItem(
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.yellow.shade800,
             label: 'tab3',
-            icon: Icon(Icons.access_time_filled),
+            icon: const Icon(Icons.access_time_filled),
           ),
           BottomNavigationBarItem(
-            backgroundColor: Colors.blue,
+            backgroundColor: Colors.red.shade400,
             label: 'tab4',
-            icon: Icon(Icons.settings),
+            icon: const Icon(Icons.settings),
           ),
         ],
       ),
