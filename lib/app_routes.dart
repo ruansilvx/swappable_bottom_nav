@@ -2,16 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:go_router/go_router.dart';
 import 'package:swappable_bottom_nav/bottom_navigation_container.dart';
 
-final appRoutes = GoRouter(
+GoRouter appRoutes({required List<StatefulShellBranch> branches}) => GoRouter(
   initialLocation: '/first',
   routes: [
     StatefulShellRoute.indexedStack(
-      branches: [
-        firstTabRoutes,
-        secondTabRoutes,
-        thirdTabRoutes,
-        fourthTabRoutes,
-      ],
+      branches: branches,
       builder: (_, __, statefulNavigationShell) {
         return BottomNavigationContainer(
           statefulNavigationShell: statefulNavigationShell,
