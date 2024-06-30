@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:swappable_bottom_nav/custom_bottom_navigation_bar.dart';
 import 'package:swappable_bottom_nav/tab_swap_provider.dart';
 
 class BottomNavigationContainer extends StatelessWidget {
@@ -17,7 +18,7 @@ class BottomNavigationContainer extends StatelessWidget {
       bottomNavigationBar: ListenableBuilder(
         listenable: context.tabController,
         builder: (context, _) {
-          return BottomNavigationBar(
+          return CustomBottomNavigationBar(
             currentIndex: statefulNavigationShell.currentIndex,
             onTap: (index) {
               statefulNavigationShell.goBranch(index);
