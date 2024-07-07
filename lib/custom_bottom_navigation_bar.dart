@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:swappable_bottom_nav/tab_swap_provider.dart';
 
 class CustomBottomNavigationBar extends StatelessWidget {
   const CustomBottomNavigationBar({
@@ -14,6 +15,17 @@ class CustomBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    highlightedBorderRadius(index) => BorderRadius.only(
+          topLeft: index == 0 ? const Radius.circular(80) : Radius.zero,
+          bottomLeft: index == 0 ? const Radius.circular(80) : Radius.zero,
+          topRight: index == items.length - 1
+              ? const Radius.circular(80)
+              : Radius.zero,
+          bottomRight: index == items.length - 1
+              ? const Radius.circular(80)
+              : Radius.zero,
+        );
+
     return SafeArea(
       child: AnimatedContainer(
         decoration: BoxDecoration(
@@ -32,25 +44,94 @@ class CustomBottomNavigationBar extends StatelessWidget {
             children: [
               for (var i = 0; i < items.length; i++)
                 Expanded(
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(80),
-                    onTap: () => onTap(i),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        AnimatedScale(
-                          scale: currentIndex == i ? .8 : 1,
-                          duration: Durations.short3,
-                          child: items[i].icon,
+                  child: LongPressDraggable(
+                    data: i,
+                    onDragStarted: () {
+                      onTap(i);
+                    },
+                    dragAnchorStrategy: pointerDragAnchorStrategy,
+                    feedback: SizedBox(
+                      width: (MediaQuery.sizeOf(context).width - 40) /
+                          items.length,
+                      height: kBottomNavigationBarHeight,
+                      child: Material(
+                        borderRadius: BorderRadius.circular(80),
+                        color: items[i].backgroundColor,
+                        child: _BottomNavItem(
+                          onTap: () => onTap(i),
+                          isSelected: true,
+                          item: items[i],
                         ),
-                        if (currentIndex == i) Text(items[i].label ?? ''),
-                      ],
+                      ),
+                    ),
+                    childWhenDragging: DecoratedBox(
+                      decoration: BoxDecoration(
+                        borderRadius: highlightedBorderRadius(i),
+                        border: Border.all(color: Colors.white, width: 2),
+                      ),
+                    ),
+                    child: DragTarget<int>(
+                      onAcceptWithDetails: (details) async {
+                        context.tabController.swapTabs(i, details.data);
+                        onTap(i);
+                      },
+                      builder: (context, candidateItems, rejectedItems) {
+                        return DecoratedBox(
+                          decoration: BoxDecoration(
+                            borderRadius: candidateItems.isNotEmpty
+                                ? highlightedBorderRadius(i)
+                                : null,
+                            border: candidateItems.isNotEmpty
+                                ? Border.all(
+                                    color: items[i].backgroundColor!,
+                                    width: 2,
+                                  )
+                                : null,
+                          ),
+                          child: _BottomNavItem(
+                            onTap: () => onTap(i),
+                            isSelected: currentIndex == i,
+                            item: items[i],
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _BottomNavItem extends StatelessWidget {
+  const _BottomNavItem({
+    required this.onTap,
+    required this.isSelected,
+    required this.item,
+  });
+
+  final VoidCallback onTap;
+  final bool isSelected;
+  final BottomNavigationBarItem item;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(80),
+      onTap: () => onTap(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          AnimatedScale(
+            scale: isSelected ? .8 : 1,
+            duration: Durations.short3,
+            child: item.icon,
+          ),
+          if (isSelected) Text(item.label ?? ''),
+        ],
       ),
     );
   }

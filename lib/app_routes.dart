@@ -3,8 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:swappable_bottom_nav/bottom_navigation_container.dart';
 
 GoRouter appRoutes({required List<StatefulShellBranch> branches}) => GoRouter(
-  initialLocation: '/first',
-  routes: [
+      initialLocation: branches.first.defaultRoute!.path,
+      routes: [
     StatefulShellRoute.indexedStack(
       branches: branches,
       builder: (_, __, statefulNavigationShell) {

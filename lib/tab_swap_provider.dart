@@ -22,7 +22,7 @@ class TabSwapProvider extends InheritedWidget {
 
   @override
   bool updateShouldNotify(covariant TabSwapProvider oldWidget) {
-    return this.tabSwapController != oldWidget.tabSwapController;
+    return tabSwapController != oldWidget.tabSwapController;
   }
 }
 

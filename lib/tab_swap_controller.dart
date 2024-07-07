@@ -12,8 +12,20 @@ class TabSwapController with ChangeNotifier {
 
   final Map<int, (int, SwappableTab)> _indexedTabs;
 
+  int selectedIndex = 0;
+
   List<SwappableTab> get currentTabConfiguration {
     return _indexedTabs.entries.map((e) => e.value.$2).toList();
+  }
+
+  void swapTabs(int tab1Index, int tab2Index) {
+    assert(tab1Index >= 0 && tab1Index < _indexedTabs.length);
+    assert(tab2Index >= 0 && tab2Index < _indexedTabs.length);
+
+    final tab1 = _indexedTabs[tab1Index]!;
+    _indexedTabs[tab1Index] = _indexedTabs[tab2Index]!;
+    _indexedTabs[tab2Index] = tab1;
+    notifyListeners();
   }
 }
 
